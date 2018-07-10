@@ -1,30 +1,41 @@
 const form = document.getElementById("list");
 const title = document.getElementById("title");
 const newItem = document.getElementById("new-item");
-// console.log(title);
-// console.log(newItem);
 
 newItem.addEventListener('keypress', saveItem);
 
 function saveItem(e) {
   if (e.keyCode == 13) {
       e.preventDefault();
-      createNewItem(this.value);
+      showNewItem(this.value);
       this.value = "";
       this.placeholder = "Add another item";
   }
 }
 
-function createNewItem(text) {
+function showNewItem(content, dueDate, priority) {
   let item = document.createElement('div');
-  let input = document.createElement('input');
-  let deleteButton = document.createElement('div');
-  input.value = text;
   form.appendChild(item);
+
+  let contentInput = document.createElement('input');
+  contentInput.value = content;
+
+  let dateInput = document.createElement('input');
+  dateInput.type = "date";
+  dateInput.value = dueDate;
+
+  let prioritySelect = document.createElement('select');
+  prioritySelect.type = "low, medium, urgent";
+  prioritySelect.option = priority;
+
+  let deleteButton = document.createElement('div');
   deleteButton.innerHTML = "X";
   deleteButton.classList = "delete";
   deleteButton.addEventListener('click', deleteItem);
-  item.appendChild(input);
+
+  item.appendChild(contentInput);
+  item.appendChild(dateInput);
+  item.appendChild(prioritySelect);
   item.appendChild(deleteButton);
 }
 
@@ -34,17 +45,32 @@ function deleteItem() {
 }
 
 
-// const listFactory = (title="Untitled List", description="", items=[]) => {
-//   const addItem = () => "function to add item";
-//   const removeItem = () => "funtion to remove item";
-//   return { title, description, items, addItem, removeItem }
-// };
-//
-//
-// const firstList = listFactory();
-// // console.log(firstList);
-//
+const listFactory = (title="Untitled List", description="", items=[]) => {
+  const addItem = (content,dueDate,priority) => {
+     items.push(itemFactory(content,dueDate,priority));
+  }
+  const removeItem = () => "funtion to remove item";
+  return { title, description, items, addItem, removeItem }
+};
 
+
+const firstList = listFactory("Groceries", "For the party!");
+
+
+const itemFactory = (content="New to-do item", dueDate=new Date()+1, priority="low" ) => {
+  const setContent = (content) => "function to edit the content";
+  const setDate = (dueDate) => "function to edit the dueDate";
+  const setPriority = (priority) => "function to edit the priority";
+  return { content, dueDate, priority, setContent, setDate, setPriority }
+};
+
+
+
+firstList.addItem("Grab bananas", new Date("08-10-2018"), "medium");
+firstList.addItem("Grab napkins",new Date("08-10-2018"),"low");
+firstList.addItem("Grab cake",new Date("08-10-2018"),"high");
+
+console.log(firstList);
 
 // function displayLists(list) {
 //
