@@ -12,16 +12,18 @@ function saveItem(e) {
   }
 }
 
-function showNewItem(content, dueDate, priority) {
-  let item = document.createElement('div');
-  form.appendChild(item);
+// function showNewItem(content, dueDate, priority) {
+function showNewItem(item) {
+  let itemDiv = document.createElement('div');
+  form.appendChild(itemDiv);
 
   let contentInput = document.createElement('input');
-  contentInput.value = content;
+  contentInput.value = item.content;
 
   let dateInput = document.createElement('input');
   dateInput.type = "date";
-  dateInput.value = dueDate;
+  // Below was suuuper annoying but required for dates:
+  dateInput.valueAsDate = new Date(item.dueDate);
 
   let prioritySelect = document.createElement('select');
   let priorities = ['low', 'medium', 'high'];
@@ -29,17 +31,21 @@ function showNewItem(content, dueDate, priority) {
      let p = new Option(priorities[i]);
      prioritySelect.options.add(p);
   }
-  prioritySelect.selectedIndex = priorities.indexOf(priority);
+  prioritySelect.selectedIndex = priorities.indexOf(item.priority);
 
   let deleteButton = document.createElement('div');
   deleteButton.innerHTML = "X";
   deleteButton.classList = "delete";
   deleteButton.addEventListener('click', deleteItem);
 
-  item.appendChild(contentInput);
-  item.appendChild(dateInput);
-  item.appendChild(prioritySelect);
-  item.appendChild(deleteButton);
+  itemDiv.appendChild(contentInput);
+  itemDiv.appendChild(dateInput);
+  itemDiv.appendChild(prioritySelect);
+  itemDiv.appendChild(deleteButton);
+  // itemDiv.addEventListener('keypress', item.setContent);
+  contentInput.onkeypress = () => { item.content = contentInput.value; };
+  dateInput.onchange = () => { item.dueDate = dateInput.value; };
+  prioritySelect.onchange = () => { item.priority = priorities[prioritySelect.selectedIndex] };
 }
 
 // remove and item:
@@ -66,7 +72,7 @@ function displayList(list) {
   input.addEventListener('keypress', saveItem);
   form.appendChild(input);
 
-  list.items.forEach(item => showNewItem(item.content, item.dueDate, item.priority));
+  list.items.forEach(item => showNewItem(item));
 }
 
 const listFactory = (title="Untitled List", description="", items=[]) => {
@@ -86,18 +92,30 @@ const listFactory = (title="Untitled List", description="", items=[]) => {
   return { title, description, items, addItem, removeItem }
 };
 
-const itemFactory = (content="New to-do item", dueDate=new Date()+1, priority="low" ) => {
-  const setContent = (content) => "function to edit the content";
-  const setDate = (dueDate) => "function to edit the dueDate";
-  const setPriority = (priority) => "function to edit the priority";
-  return { content, dueDate, priority, setContent, setDate, setPriority }
+
+
+const itemFactory = (content="New to-do item", dueDate=new Date(), priority="low" ) => {
+  // const setContent = (content) => {
+  //   // if (e.keyCode == 13) {
+  //       // e.preventDefault();
+  //       console.log(1);
+  //       console.log(this);
+  //       // console.log(target.value);
+  //       // content = this.value;
+  //       // displayList(list);
+  //   // }
+  // }
+  // const setDate = (dueDate) => "function to edit the dueDate";
+  // const setPriority = (priority) => "function to edit the priority";
+  // return { content, dueDate, priority, setContent, setDate, setPriority }
+  return { content, dueDate, priority }
 };
 
 const list = listFactory("Groceries", "For the party!");
 
-list.addItem("Grab bananas", new Date("08-10-2018"), "medium");
-list.addItem("Grab napkins",new Date("08-10-2018"),"low");
-list.addItem("Grab cake",new Date("08-10-2018"),"high");
+list.addItem("Grab bananas", "2018-08-10", "medium");
+list.addItem("Grab napkins", "2018-08-10","low");
+list.addItem("Grab cake", "2018-08-10","high");
 
 console.log(list);
 
