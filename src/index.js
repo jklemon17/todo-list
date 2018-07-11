@@ -1,5 +1,5 @@
 const form = document.getElementById("list");
-const title = document.getElementById("title");
+// const title = document.getElementById("title");
 const newItem = document.getElementById("new-item");
 
 function saveItem(e) {
@@ -7,17 +7,29 @@ function saveItem(e) {
       e.preventDefault();
       list.addItem(this.value);
       displayList(list);
+      // create a new blank at top of page:
       this.value = "";
       this.placeholder = "Add another item";
   }
 }
 
+// function changeListTitle(item) {
+//   let titleInput = document.getElementById("title");
+//   titleInput.onkeypress = () => { item.title = titleInput.value; };
+// }
+
 // function showNewItem(content, dueDate, priority) {
 function showNewItem(item) {
   let itemDiv = document.createElement('div');
+  itemDiv.classList = "itemDiv";
   form.appendChild(itemDiv);
 
+  let checkboxInput = document.createElement('input');
+  checkboxInput.type = "checkbox";
+  checkboxInput.checked = item.state;
+
   let contentInput = document.createElement('input');
+  contentInput.type = "text";
   contentInput.value = item.content;
 
   let dateInput = document.createElement('input');
@@ -38,12 +50,18 @@ function showNewItem(item) {
   deleteButton.classList = "delete";
   deleteButton.addEventListener('click', deleteItem);
 
+  itemDiv.appendChild(checkboxInput);
   itemDiv.appendChild(contentInput);
   itemDiv.appendChild(dateInput);
   itemDiv.appendChild(prioritySelect);
   itemDiv.appendChild(deleteButton);
   // itemDiv.addEventListener('keypress', item.setContent);
-  contentInput.onkeypress = () => { item.content = contentInput.value; };
+  // checkboxInput.onclick = () => checkboxInput.checked.toggle; );
+  checkboxInput.onclick = () => {
+    item.state = checkboxInput.checked;
+    itemDiv.classList.toggle("checked");
+  };
+  contentInput.onchange = () => { item.content = contentInput.value; };
   dateInput.onchange = () => { item.dueDate = dateInput.value; };
   prioritySelect.onchange = () => { item.priority = priorities[prioritySelect.selectedIndex] };
 }
@@ -56,13 +74,16 @@ function deleteItem() {
 }
 
 function displayList(list) {
+  // remove every item first to clear page:
   while (form.firstChild) {
     form.removeChild(form.firstChild);
   }
   //should be separate displayTitle function
-  let title = document.createElement('input');
-  title.value = list.title;
-  form.appendChild(title);
+  let titleInput = document.createElement('input');
+  titleInput.value = list.title;
+  titleInput.id = "title";
+  titleInput.onchange = () => { list.title = titleInput.value; };
+  form.appendChild(titleInput);
 
   form.appendChild(document.createElement('br'));
 
@@ -76,25 +97,19 @@ function displayList(list) {
 }
 
 const listFactory = (title="Untitled List", description="", items=[]) => {
-  const addItem = (content, dueDate, priority) => {
-     items.push(itemFactory(content, dueDate, priority));
+  const addItem = (state, content) => {
+     items.push(itemFactory(false, content));
   }
   const removeItem = (content) => {
     index = items.indexOf(items.find(x => x.content == content))
     items.splice(index, 1)
-    // for (i in items) {
-    //   if (content == items[i].content) {
-    //     items.splice(i, 1);
-    //     break;
-    //   }
-    // }
   }
   return { title, description, items, addItem, removeItem }
 };
 
 
 
-const itemFactory = (content="New to-do item", dueDate=new Date(), priority="low" ) => {
+const itemFactory = (state=false, content="New to-do item", dueDate=new Date(), priority="low" ) => {
   // const setContent = (content) => {
   //   // if (e.keyCode == 13) {
   //       // e.preventDefault();
@@ -108,14 +123,14 @@ const itemFactory = (content="New to-do item", dueDate=new Date(), priority="low
   // const setDate = (dueDate) => "function to edit the dueDate";
   // const setPriority = (priority) => "function to edit the priority";
   // return { content, dueDate, priority, setContent, setDate, setPriority }
-  return { content, dueDate, priority }
+  return { state, content, dueDate, priority }
 };
 
 const list = listFactory("Groceries", "For the party!");
 
-list.addItem("Grab bananas", "2018-08-10", "medium");
-list.addItem("Grab napkins", "2018-08-10","low");
-list.addItem("Grab cake", "2018-08-10","high");
+list.addItem(false, "Grab bananas", "2018-08-10", "medium");
+list.addItem(false, "Grab napkins", "2018-08-10", "low");
+list.addItem(false, "Grab cake", "2018-08-10", "high");
 
 console.log(list);
 

@@ -1,3 +1,16 @@
 .new-item {
   color: lightgrey;
 }
+
+.itemDiv input[type="text"] {
+  border: none;
+}
+
+.delete {
+  display: inline;
+}
+
+.checked input {
+  text-decoration: line-through;
+  color: lightgrey;
+}
