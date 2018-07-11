@@ -5,7 +5,7 @@ const newItem = document.getElementById("new-item");
 function saveItem(e) {
   if (e.keyCode == 13) {
       e.preventDefault();
-      list.addItem(this.value);
+      list.addItem(false, this.value);
       displayList(list);
       // create a new blank at top of page:
       this.value = "";
@@ -68,7 +68,8 @@ function showNewItem(item) {
 
 // remove and item:
 function deleteItem() {
-  list.removeItem(this.parentNode.firstChild.value);
+  // children[1] is the second element inside the itemDiv (the text input)
+  list.removeItem(this.parentNode.children[1].value);
   console.log(list);
   displayList(list);
 }
