@@ -1,7 +1,7 @@
 .list {
   position: relative;
   border: 2px solid blue;
-  width: 40%;
+  width: 50%;
   margin: auto;
   margin-bottom: 20px;
   text-align: center;
@@ -41,7 +41,7 @@ input[type="date"] {
   margin-right: 5px;
 }
 select {
-  width: 8%;
+  width: 12%;
 }
 
 .delete {
