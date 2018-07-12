@@ -1,6 +1,3 @@
-// might not need:
-let form = document.getElementById("list");
-
 function addToAllLists() {
   allLists.push(listFactory());
   displayAll();
@@ -14,7 +11,6 @@ function deleteList(e) {
 
 function displayAll() {
   localStorage.setItem('to-do-storage', JSON.stringify(allLists));
-
 // remove all forms each time to "refresh the page"
   while (document.body.firstChild) {
     document.body.removeChild(document.body.firstChild);
@@ -56,6 +52,7 @@ function displayList(list) {
   input.placeholder = "Add an item";
   input.inputList = list;
   input.addEventListener('keypress', saveItem);
+  input.addEventListener('blur', saveItem);
 
       // IMPORTANT EXAMPLE!!!!
       // var someInput = document.querySelector('input');
@@ -124,13 +121,15 @@ function showNewItem(form, list, item) {
 }
 
 function saveItem(e) {
-  if (e.keyCode == 13) {
-      e.preventDefault();
-      e.target.inputList.addItem(false, this.value);
-      displayAll();
-      // create a new blank at top of page:
-      this.value = "";
-      this.placeholder = "Add another item";
+  if (e.keyCode == 13 || e.type == 'blur') {
+    e.target.removeEventListener('blur', saveItem);
+    e.target.removeEventListener('keypress', saveItem);
+    // e.preventDefault();
+    e.target.inputList.addItem(false, this.value);
+    displayAll();
+    // create a new blank at top of list:
+    this.value = "";
+    this.placeholder = "Add another item";
   }
 }
 
@@ -144,10 +143,10 @@ function deleteItem(e) {
 
 
 const listFactory = (title="Untitled List", description="", items=[]) => {
-  const addItem = (state, content) => {
-     items.push(itemFactory(false, content));
+  let addItem = (state, content) => {
+    items.push(itemFactory(false, content));
   }
-  const removeItem = (content) => {
+  let removeItem = (content) => {
     index = items.indexOf(items.find(x => x.content == content))
     items.splice(index, 1)
   }
@@ -161,19 +160,15 @@ const itemFactory = (state=false, content="New to-do item", dueDate=new Date(), 
 };
 
 
-
-
 let allLists;
-// console.log(localStorage.getItem('to-do-storage'));
 
 // if previous list exists in browser storage, load it:
 if (localStorage.getItem('to-do-storage')) {
   allLists = JSON.parse(localStorage.getItem('to-do-storage'));
-  console.log(allLists);
+  allLists = allLists.map(list => listFactory(list.title, list.description, list.items ));
 } else {
   // else create a default starting list:
   allLists = [];
-  console.log(allLists);
   allLists.push(listFactory());
   allLists[0].addItem();
 }
