@@ -1,51 +1,48 @@
 let allLists = [];
 
-let newListButton = document.createElement('div');
-newListButton.innerHTML = "+";
-newListButton.classList = "newListButton";
-document.body.appendChild(newListButton);
-// newListButton.addEventListener('click', listFactory);
-newListButton.addEventListener('click', addToAllLists);
+let form = document.getElementById("list");
 
 function addToAllLists() {
   allLists.push(listFactory());
-  console.log(allLists);
-  // remove all forms each time to "refresh the page"
+  displayAll();
+  // console.log(allLists);
+}
+
+function deleteList(e) {
+  index = allLists.indexOf(e.target.listToDelete);
+  allLists.splice(index, 1);
+  displayAll();
+}
+
+function displayAll() {
+// remove all forms each time to "refresh the page"
   while (document.body.firstChild) {
     document.body.removeChild(document.body.firstChild);
   }
-
-  allLists.forEach(list => {
-
-    displayList(list);
-  });
-
 
   let newListButton = document.createElement('div');
   newListButton.innerHTML = "+";
   newListButton.classList = "newListButton";
   document.body.appendChild(newListButton);
-  // newListButton.addEventListener('click', listFactory);
   newListButton.addEventListener('click', addToAllLists);
-  
+
+  allLists.forEach(list => { displayList(list); });
 }
-
-let form = document.getElementById("list");
-// const title = document.getElementById("title");
-const newItem = document.getElementById("new-item");
-
 
 function displayList(list) {
 
   let form = document.createElement('form');
+  form.classList = "list";
   document.body.appendChild(form);
 
-  form.classList = "list";
+  let deleteListButton = document.createElement('div');
+  deleteListButton.innerHTML = "X";
+  deleteListButton.classList = "delete-list-button";
+  deleteListButton.listToDelete = list;
+  console.log(deleteListButton.listToDelete);
+  deleteListButton.addEventListener('click', deleteList);
+  form.appendChild(deleteListButton);
 
-  // remove every item first to clear page:
-  while (form.firstChild) {
-    form.removeChild(form.firstChild);
-  }
   //should be separate displayTitle function
   let titleInput = document.createElement('input');
   titleInput.value = list.title;
@@ -55,6 +52,7 @@ function displayList(list) {
 
   form.appendChild(document.createElement('br'));
 
+  //should be separate displayInput function
   let input = document.createElement('input');
   input.placeholder = "Add an item";
   input.inputList = list;
@@ -71,12 +69,11 @@ function displayList(list) {
 
 
   form.appendChild(input);
-
-  list.items.forEach(item => showNewItem(item, list));
+  list.items.forEach(item => showNewItem(form, list, item));
 }
 
 
-function showNewItem(item, list) {
+function showNewItem(form, list, item) {
   let itemDiv = document.createElement('div');
   itemDiv.classList = "itemDiv";
   form.appendChild(itemDiv);
@@ -116,10 +113,6 @@ function showNewItem(item, list) {
   deleteButton.delButtonList = list;
   deleteButton.addEventListener('click', deleteItem);
 
-      // let input = document.createElement('input');
-      // input.placeholder = "Add an item";
-      // input.addEventListener('keypress', saveItem);
-
   itemDiv.appendChild(checkboxInput);
   itemDiv.appendChild(contentInput);
   itemDiv.appendChild(dateInput);
@@ -131,26 +124,21 @@ function showNewItem(item, list) {
   prioritySelect.onchange = () => { item.priority = priorities[prioritySelect.selectedIndex] };
 }
 
-
-
 function saveItem(e) {
   if (e.keyCode == 13) {
       e.preventDefault();
       e.target.inputList.addItem(false, this.value);
-      displayList(e.target.inputList);
+      displayAll();
       // create a new blank at top of page:
       this.value = "";
       this.placeholder = "Add another item";
   }
 }
 
-
-
-
 function deleteItem(e) {
   // children[1] is the second element inside the itemDiv (the text input)
   e.target.delButtonList.removeItem(this.parentNode.children[1].value);
-  displayList(e.target.delButtonList);
+  displayAll();
 }
 
 
@@ -170,33 +158,11 @@ const listFactory = (title="Untitled List", description="", items=[]) => {
 
 
 const itemFactory = (state=false, content="New to-do item", dueDate=new Date(), priority="low" ) => {
-  // const setContent = (content) => {
-  //   // if (e.keyCode == 13) {
-  //       // e.preventDefault();
-  //       console.log(1);
-  //       console.log(this);
-  //       // console.log(target.value);
-  //       // content = this.value;
-  //       // displayList(list);
-  //   // }
-  // }
-  // const setDate = (dueDate) => "function to edit the dueDate";
-  // const setPriority = (priority) => "function to edit the priority";
-  // return { content, dueDate, priority, setContent, setDate, setPriority }
   return { state, content, dueDate, priority }
 };
 
-allLists.push(listFactory("Groceries", "For the party!"));
+allLists.push(listFactory());
 
-// list.addItem(false, "Grab bananas", "2018-08-10", "medium");
-// list.addItem(false, "Grab napkins", "2018-08-10", "low");
-// list.addItem(false, "Grab cake", "2018-08-10", "high");
+allLists[0].addItem();
 
-// console.log(list);
-
-// displayList(list);
-
-console.log(allLists);
-
-allLists.forEach(list => displayList(list));
-// list.items.forEach(item => showNewItem(item));
+displayAll();
