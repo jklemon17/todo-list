@@ -1,0 +1,49 @@
+.list {
+  position: relative;
+  border: 2px solid blue;
+  width: 33%;
+  margin: auto;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.delete-list-button {
+  text-align: right;
+  margin-right: 3px;
+}
+
+.newListButton {
+  /* content: "+"; */
+  font-size: 50px;
+  text-align: center;
+}
+
+.new-item {
+  color: lightgrey;
+}
+
+input {
+  margin-bottom: 5px;
+}
+
+
+.itemDiv input[type="text"] {
+  border: none;
+  width: 33%;
+}
+
+input[type="date"] {
+  width: 33%;
+  margin-left: 3px;
+  margin-right: 5px;
+}
+
+.delete {
+  display: inline;
+  margin-left: 5px;
+}
+
+.checked input {
+  text-decoration: line-through;
+  color: lightgrey;
+}
