@@ -17,6 +17,11 @@
     width: 90%;
   }
 }
+@media screen and (device-width: 360px) {
+  .list {
+    width: 90%;
+  }
+}
 
 .delete-list-button {
   width: 5%;
