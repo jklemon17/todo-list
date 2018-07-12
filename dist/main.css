@@ -1,6 +1,19 @@
+.list {
+  border: 2px solid blue;
+  width: 40%;
+  margin: auto;
+  text-align: center;
+}
+
+.newListButton {
+  /* content: "+"; */
+  font-size: 50px;
+}
+
 .new-item {
   color: lightgrey;
 }
+
 
 .itemDiv input[type="text"] {
   border: none;
