@@ -1,7 +1,7 @@
 .list {
   position: relative;
   border: 2px solid blue;
-  width: 40%;
+  width: 30%;
   margin: auto;
   margin-bottom: 20px;
   text-align: center;
@@ -26,16 +26,22 @@ input {
   margin-bottom: 5px;
 }
 
+/* .itemDiv {
+  text-align: left:
+} */
 
 .itemDiv input[type="text"] {
   border: none;
-  width: 33%;
+  width: 30%;
 }
 
 input[type="date"] {
-  width: 33%;
+  width: 25%;
   margin-left: 3px;
   margin-right: 5px;
+}
+select {
+  width: 8%;
 }
 
 .delete {
