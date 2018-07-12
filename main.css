@@ -22,13 +22,25 @@
   color: lightgrey;
 }
 
+input {
+  margin-bottom: 5px;
+}
+
 
 .itemDiv input[type="text"] {
   border: none;
+  width: 33%;
+}
+
+input[type="date"] {
+  width: 33%;
+  margin-left: 3px;
+  margin-right: 5px;
 }
 
 .delete {
   display: inline;
+  margin-left: 5px;
 }
 
 .checked input {
