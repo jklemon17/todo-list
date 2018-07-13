@@ -1,13 +1,5 @@
-function addToAllLists() {
-  allLists.push(listFactory());
-  displayAll();
-}
+import { newList, deleteList } from "./add_and_delete_lists"
 
-function deleteList(e) {
-  index = allLists.indexOf(e.target.listToDelete);
-  allLists.splice(index, 1);
-  displayAll();
-}
 
 function displayAll() {
   localStorage.setItem('to-do-storage', JSON.stringify(allLists));
@@ -20,7 +12,7 @@ function displayAll() {
   newListButton.innerHTML = "+";
   newListButton.classList = "newListButton";
   document.body.appendChild(newListButton);
-  newListButton.addEventListener('click', addToAllLists);
+  newListButton.addEventListener('click', newList);
 
   allLists.forEach(list => { displayList(list); });
 }
@@ -53,6 +45,7 @@ function displayList(list) {
   input.inputList = list;
   input.addEventListener('keypress', saveItem);
   input.addEventListener('blur', saveItem);
+  form.appendChild(input);
 
       // IMPORTANT EXAMPLE!!!!
       // var someInput = document.querySelector('input');
@@ -64,7 +57,6 @@ function displayList(list) {
       // }
 
 
-  form.appendChild(input);
   list.items.forEach(item => showNewItem(form, list, item));
 }
 
@@ -80,20 +72,27 @@ function showNewItem(form, list, item) {
   if (checkboxInput.checked) {
     itemDiv.classList.toggle("checked");
   }
-
   checkboxInput.onclick = () => {
     item.state = checkboxInput.checked;
     itemDiv.classList.toggle("checked");
   };
+  itemDiv.appendChild(checkboxInput);
+
 
   let contentInput = document.createElement('input');
   contentInput.type = "text";
   contentInput.value = item.content;
+  contentInput.onchange = () => { item.content = contentInput.value; };
+  itemDiv.appendChild(contentInput);
+
 
   let dateInput = document.createElement('input');
   dateInput.type = "date";
   // Below was suuuper annoying but required for dates:
   dateInput.valueAsDate = new Date(item.dueDate);
+  dateInput.onchange = () => { item.dueDate = dateInput.value; };
+  itemDiv.appendChild(dateInput);
+
 
   let prioritySelect = document.createElement('select');
   let priorities = ['low', 'medium', 'high'];
@@ -102,22 +101,17 @@ function showNewItem(form, list, item) {
      prioritySelect.options.add(p);
   }
   prioritySelect.selectedIndex = priorities.indexOf(item.priority);
+  prioritySelect.onchange = () => { item.priority = priorities[prioritySelect.selectedIndex] };
+  itemDiv.appendChild(prioritySelect);
+
 
   let deleteButton = document.createElement('div');
   deleteButton.innerHTML = "X";
   deleteButton.classList = "delete";
   deleteButton.delButtonList = list;
   deleteButton.addEventListener('click', deleteItem);
-
-  itemDiv.appendChild(checkboxInput);
-  itemDiv.appendChild(contentInput);
-  itemDiv.appendChild(dateInput);
-  itemDiv.appendChild(prioritySelect);
   itemDiv.appendChild(deleteButton);
 
-  contentInput.onchange = () => { item.content = contentInput.value; };
-  dateInput.onchange = () => { item.dueDate = dateInput.value; };
-  prioritySelect.onchange = () => { item.priority = priorities[prioritySelect.selectedIndex] };
 }
 
 function saveItem(e) {
@@ -174,3 +168,7 @@ if (localStorage.getItem('to-do-storage')) {
 }
 
 displayAll();
+
+
+
+export { allLists, listFactory, displayAll }
