@@ -1,0 +1,49 @@
+Function groups:
+
+
+
+addToAllLists  ->
+
+  newList
+  deleteList
+
+
+
+displayAll
+
+  ->  newListButton
+
+
+DisplayList    LONG
+
+  -> createHTMLform
+  -> createDeleteButton
+  -> create Title
+  -> create newItemInput
+  -> showAllItems
+
+
+showNewItem    LONG
+
+  -> createHTMLItemDiv
+  -> createCheckbox
+  -> createItemTextInput
+  -> createDateInput
+  -> createPriorityInput
+  -> createDeleteItemButton
+
+
+
+saveItem
+
+deleteItem
+
+
+
+listFactory
+
+itemFactory
+
+
+
+Initial setup and localstorage
