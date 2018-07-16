@@ -2,9 +2,10 @@ Function groups:
 
 
 
-addToAllLists  ->  newList
+addToAllLists  ->
 
-deleteList
+  newList
+  deleteList
 
 
 
