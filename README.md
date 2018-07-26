@@ -1,4 +1,4 @@
-**Another JavaScript To-do List**
+## Another JavaScript To-do List
 
 A simple to-do list made with factories.
 
@@ -10,3 +10,8 @@ To run this on your local machine:
 - run `npm install`
 - run `npm run build`
 - open the index.html file
+
+## Authors
+
+* **Kyle Lemon** - [jklemon17](https://github.com/jklemon17)
+* **Paul Rail** - [PolarisTLX](https://github.com/PolarisTLX)
